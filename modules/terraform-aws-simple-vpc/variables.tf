@@ -1,7 +1,7 @@
 variable "region" {
   description = "The region for the provider to connect to."
   type        = string
-  default     = ""
+  default     = "eu-west-1"
 
   validation {
     condition     = length(var.region) != 0
@@ -27,5 +27,5 @@ variable "cidr_block_ssh" {
 variable "aws_name_prefix" {
   description = "This string will show in the Name collumn in the AWS webgui for all deployed resources."
   type        = string
-  default     = ""
+  default     = "unset"
 }
