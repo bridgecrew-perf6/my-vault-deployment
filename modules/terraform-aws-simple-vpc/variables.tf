@@ -1,7 +1,7 @@
 variable "region" {
   description = "The region for the provider to connect to."
   type        = string
-  default     = "eu-west-1"
+  default     = ""
 
   validation {
     condition     = length(var.region) != 0
@@ -17,12 +17,11 @@ variable "public_subnet" {
   description = "Boolean to enable public ip's within the subnet and make the subnet internet accessable."
   type        = bool
   default     = false
-
 }
 variable "cidr_block_ssh" {
   description = "If the subnet is public, this is the cidr block that is allowed to connect with SSH."
-  type        = string
-  default     = "0.0.0.0/0"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
 }
 variable "aws_name_prefix" {
   description = "This string will show in the Name collumn in the AWS webgui for all deployed resources."

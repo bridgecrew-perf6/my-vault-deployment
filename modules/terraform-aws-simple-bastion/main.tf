@@ -7,11 +7,12 @@ provider "aws" {
 
 # Create the Bastion AWS instance
 resource "aws_instance" "bastion" {
-  ami             = var.ami
-  instance_type   = var.instance_type
-  security_groups = [aws_security_group.ssh.id]
-  subnet_id       = var.subnet
-  key_name        = aws_key_pair.bastion_public_sshkey.key_name
+  ami                         = var.ami
+  instance_type               = var.instance_type
+  security_groups             = [aws_security_group.ssh.id]
+  subnet_id                   = var.subnet
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.bastion_public_sshkey.key_name
 
   # Default connection to use for all provisioners.
   connection {

@@ -16,9 +16,9 @@ resource "aws_vpc" "main" {
 
 
 resource "aws_subnet" "main" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.cidr_block
-  map_public_ip_on_launch = var.public_subnet
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.cidr_block
+  map_public_ip_on_launch = var.public_subnet # TODO better to solve @ instance level instead of subnet level because Vault instance does not need a public ip right?
 
   tags = {
     Name = "${var.aws_name_prefix} subnet"
@@ -63,6 +63,18 @@ resource "aws_security_group" "main" {
   name        = "main-sg"
   description = "Main security group, allows all outgoing"
   vpc_id      = aws_vpc.main.id
+
+  ingress = [{ # TODO toegevoegd, controleren!
+    description      = "ingress port 22 allow"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = var.cidr_block_ssh # TODO variable name consistancy with other modules, in bastion modules it is called slightly different.
+    self             = true
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = []
+  }]
 
   egress = [{
     cidr_blocks      = ["0.0.0.0/0"]
