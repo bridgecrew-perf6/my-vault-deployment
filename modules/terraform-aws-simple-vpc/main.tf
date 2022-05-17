@@ -16,8 +16,8 @@ resource "aws_vpc" "main" {
 
 
 resource "aws_subnet" "main" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.cidr_block
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.cidr_block
   map_public_ip_on_launch = var.public_subnet # TODO better to solve @ instance level instead of subnet level because Vault instance does not need a public ip right?
 
   tags = {

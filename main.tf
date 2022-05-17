@@ -41,19 +41,6 @@ module "simple-vpc" {
 }
 
 
-# Vault
-module "simple-vault" {
-  source = "./modules/terraform-aws-simple-vault"
-
-  region          = var.region
-  vpc             = module.simple-vpc.vpc_id
-  subnet          = module.simple-vpc.vpc_subnet
-  ami             = data.aws_ami.amazon-linux-2022.id
-  instance_type   = "t2.micro"
-  aws_name_prefix = "vault richarde"
-}
-
-
 # Bastion
 module "simple-bastion" {
   source = "./modules/terraform-aws-simple-bastion"
@@ -66,4 +53,20 @@ module "simple-bastion" {
   ami             = "ami-0b0bf695cabdc2ce8"
   instance_type   = "t2.micro"
   aws_name_prefix = "bastion richarde"
+}
+
+
+# Vault
+module "simple-vault" {
+  source = "./modules/terraform-aws-simple-vault"
+
+  region          = var.region
+  vpc             = module.simple-vpc.vpc_id
+  subnet          = module.simple-vpc.vpc_subnet
+  ssh_cidr_blocks = ["10.0.0.0/16"]
+  sg-ssh          = module.simple-bastion.sg-ssh
+  bastion_pubkey  = module.simple-bastion.pubkey
+  ami             = data.aws_ami.amazon-linux-2022.id
+  instance_type   = "t2.micro"
+  aws_name_prefix = "vault richarde"
 }
