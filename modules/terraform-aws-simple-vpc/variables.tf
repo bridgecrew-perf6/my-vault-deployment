@@ -18,7 +18,7 @@ variable "public_subnet" {
   type        = bool
   default     = false
 }
-variable "cidr_block_ssh" {
+variable "ssh_cidr_blocks" {
   description = "If the subnet is public, this is the cidr block that is allowed to connect with SSH."
   type        = list(string)
   default     = ["0.0.0.0/0"]

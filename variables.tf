@@ -8,3 +8,8 @@ variable "region" {
     error_message = "Region variable not set!"
   }
 }
+variable "ssh_cidr_blocks" {
+  description = "CIDR block for SSH access to the bastion."
+  type = list(string)
+  default = ["87.101.0.75/32"]
+}

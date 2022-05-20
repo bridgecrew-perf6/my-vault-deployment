@@ -9,7 +9,7 @@ provider "aws" {
 resource "aws_instance" "bastion" {
   ami                         = var.ami
   instance_type               = var.instance_type
-  security_groups             = [aws_security_group.ssh.id]
+  security_groups             = [aws_security_group.public_inbound_ssh.id]
   subnet_id                   = var.subnet
   associate_public_ip_address = true
   key_name                    = aws_key_pair.bastion_public_sshkey.key_name
@@ -34,8 +34,8 @@ resource "aws_instance" "bastion" {
 }
 
 
-resource "aws_security_group" "ssh" {
-  name        = "ssh-sg"
+resource "aws_security_group" "public_inbound_ssh" {
+  name        = "public_ssh"
   description = "Main security group, allows all outgoing"
   vpc_id      = var.vpc
 
@@ -46,6 +46,18 @@ resource "aws_security_group" "ssh" {
     protocol         = "tcp"
     cidr_blocks      = var.ssh_cidr_blocks
     self             = true
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = []
+  }]
+
+    egress = [{
+    cidr_blocks      = ["0.0.0.0/0"]
+    description      = "egress allow all"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    self             = false
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     security_groups  = []

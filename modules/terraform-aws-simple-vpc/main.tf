@@ -64,12 +64,12 @@ resource "aws_security_group" "main" {
   description = "Main security group, allows all outgoing"
   vpc_id      = aws_vpc.main.id
 
-  ingress = [{ # TODO toegevoegd, controleren!
+  ingress = [{
     description      = "ingress port 22 allow"
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = var.cidr_block_ssh # TODO variable name consistancy with other modules, in bastion modules it is called slightly different.
+    cidr_blocks      = var.ssh_cidr_blocks
     self             = true
     ipv6_cidr_blocks = []
     prefix_list_ids  = []

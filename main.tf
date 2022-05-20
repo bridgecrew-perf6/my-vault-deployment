@@ -36,7 +36,7 @@ module "simple-vpc" {
   region          = var.region
   cidr_block      = "10.0.0.0/16"
   public_subnet   = true
-  cidr_block_ssh  = ["0.0.0.0/0"] # TODO klopt de variable naam wel? is het wel het cidr voor ssh?
+  ssh_cidr_blocks = var.ssh_cidr_blocks # TODO klopt de variable naam wel? is het wel het cidr voor ssh?
   aws_name_prefix = "vpc richarde"
 }
 
@@ -48,8 +48,7 @@ module "simple-bastion" {
   region = var.region
   vpc    = module.simple-vpc.vpc_id
   subnet = module.simple-vpc.vpc_subnet
-  #TODO ssh_cidr_blocks = ["my-ip/32"]
-  ssh_cidr_blocks = ["0.0.0.0/0"]
+  ssh_cidr_blocks = var.ssh_cidr_blocks
   ami             = "ami-0b0bf695cabdc2ce8"
   instance_type   = "t2.micro"
   aws_name_prefix = "bastion richarde"
