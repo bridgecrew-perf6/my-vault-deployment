@@ -3,3 +3,4 @@ tmp
 *.tfstate
 .terraform
 .DS_store
+*.tfvars
