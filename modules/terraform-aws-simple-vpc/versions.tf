@@ -7,6 +7,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.27"
     }
-
   }
+}
+
+# Provider config
+provider "aws" {
+  profile = "default"
+  region  = var.region
 }
