@@ -9,7 +9,7 @@ provider "aws" {
 resource "aws_instance" "bastion" {
   ami                         = var.ami
   instance_type               = var.instance_type
-  security_groups             = [aws_security_group.public_inbound_ssh.id]
+  vpc_security_group_ids      = [aws_security_group.public_inbound_ssh.id]
   subnet_id                   = var.subnet
   associate_public_ip_address = true
   key_name                    = aws_key_pair.bastion_public_sshkey.key_name
