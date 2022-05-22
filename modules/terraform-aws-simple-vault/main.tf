@@ -1,5 +1,3 @@
-# TODO ssh toegang middels ssh key vanaf bastion host fixen, pub key iss al wel geplaatst
-
 # Provider config
 provider "aws" {
   profile = "default"
@@ -12,24 +10,9 @@ resource "aws_instance" "vault" {
   ami                         = var.ami
   instance_type               = var.instance_type
   vpc_security_group_ids      = [aws_security_group.private_inbound_ssh.id,]
-  # security_groups             = [var.sg-ssh,]
   subnet_id                   = var.subnet
   associate_public_ip_address = false
   key_name                    = var.bastion_pubkey
-
-  # Default connection to use for all provisioners.
-  # connection {
-  #   type        = "ssh"
-  #   user        = var.default_ssh_user
-  #   private_key = local_sensitive_file.bastion_private_sshkey.content
-  #   host        = self.public_ip
-  # }
-
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "echo debugging message to test provisioning",
-  #   ]
-  # }
 
   tags = {
     Name = var.aws_name_prefix

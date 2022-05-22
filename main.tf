@@ -1,23 +1,4 @@
-# TODO igw: seperate vars for allow_access_from_internet en allow_access_to_internet
-# TODO intelligenter maken met outputs oid? Wat als meerdere subnets ofzo, hoe met outputs/data?
-# TODO make local for the AWS tags Name field?
-# TODO Vault server + provision ing with userdata <-- !!!
-# TODO bastion toegang geven op alle (evt. gemarkeerde) servers in subnet?
-# TODO Variables have to reorganized variables.tfvars -> variables.tf -> main.tf -> module variables
-
-# Terraform config
-terraform {
-
-}
-
-# Provider config
-provider "aws" {
-  profile = "default"
-  region  = var.region
-}
-
-# Get data:
-# Get latest Amazon Linux 2022 AMI
+# Get latest Amazon Linux 2022 AMI for the region.
 data "aws_ami" "amazon-linux-2022" {
   most_recent = true
   owners      = ["amazon"]
@@ -28,20 +9,18 @@ data "aws_ami" "amazon-linux-2022" {
   }
 }
 
-# Modules
-# VPC
+
 module "simple-vpc" {
   source = "./modules/terraform-aws-simple-vpc"
 
   region          = var.region
   cidr_block      = "10.0.0.0/16"
   public_subnet   = true
-  ssh_cidr_blocks = var.ssh_cidr_blocks # TODO klopt de variable naam wel? is het wel het cidr voor ssh?
+  ssh_cidr_blocks = var.ssh_cidr_blocks
   aws_name_prefix = "vpc richarde"
 }
 
 
-# Bastion
 module "simple-bastion" {
   source = "./modules/terraform-aws-simple-bastion"
 
@@ -55,7 +34,6 @@ module "simple-bastion" {
 }
 
 
-# Vault
 module "simple-vault" {
   source = "./modules/terraform-aws-simple-vault"
 
