@@ -1,11 +1,11 @@
 # Get latest Amazon Linux 2022 AMI for the region.
-data "aws_ami" "amazon-linux-2022" {
+data "aws_ami" "latest_ubuntu" {
   most_recent = true
-  owners      = ["amazon"]
+  owners      = ["099720109477"]
 
   filter {
     name   = "name"
-    values = ["al2022-ami-202*-x86_64"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 }
 
@@ -28,7 +28,7 @@ module "simple-bastion" {
   vpc    = module.simple-vpc.vpc_id
   subnet = module.simple-vpc.vpc_subnet
   ssh_cidr_blocks = var.ssh_cidr_blocks
-  ami             = "ami-0b0bf695cabdc2ce8"
+  ami             = data.aws_ami.latest_ubuntu.id
   instance_type   = "t2.micro"
   aws_name_prefix = "bastion richarde"
 }
@@ -43,7 +43,7 @@ module "simple-vault" {
   ssh_cidr_blocks = ["10.0.0.0/16"]
   sg-ssh          = module.simple-bastion.sg-ssh
   bastion_pubkey  = module.simple-bastion.pubkey
-  ami             = data.aws_ami.amazon-linux-2022.id
+  ami             = data.aws_ami.latest_ubuntu.id
   instance_type   = "t2.micro"
   aws_name_prefix = "vault richarde"
 }

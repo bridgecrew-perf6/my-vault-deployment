@@ -1,10 +1,3 @@
-# Provider config
-provider "aws" {
-  profile = "default"
-  region  = var.region
-}
-
-
 # Resources
 resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
@@ -59,8 +52,8 @@ resource "aws_route_table_association" "a" {
 
 
 
-resource "aws_security_group" "main" {
-  name        = "main-sg"
+resource "aws_security_group" "vpc" {
+  name        = "vpc-sg"
   description = "Main security group, allows all outgoing"
   vpc_id      = aws_vpc.main.id
 

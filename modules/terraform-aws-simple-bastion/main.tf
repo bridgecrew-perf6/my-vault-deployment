@@ -1,10 +1,3 @@
-# Provider config
-provider "aws" {
-  profile = "default"
-  region  = var.region
-}
-
-
 # Create the Bastion AWS instance
 resource "aws_instance" "bastion" {
   ami                         = var.ami
@@ -13,20 +6,7 @@ resource "aws_instance" "bastion" {
   subnet_id                   = var.subnet
   associate_public_ip_address = true
   key_name                    = aws_key_pair.bastion_public_sshkey.key_name
-
-  # Default connection to use for all provisioners.
-  connection {
-    type        = "ssh"
-    user        = var.default_ssh_user
-    private_key = local_sensitive_file.bastion_private_sshkey.content
-    host        = self.public_ip
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "echo debugging message to test provisioning",
-    ]
-  }
+  user_data                   = "" # TODO hier verder gaan, switched naar ubuntu ami... ssh might not be enabled byt default in this ami... needs fixin.
 
   tags = {
     Name = var.aws_name_prefix
