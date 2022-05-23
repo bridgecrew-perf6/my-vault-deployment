@@ -1,3 +1,10 @@
+output "ssh_allowed_from_ips" {
+  value = var.ssh_cidr_blocks
+}
+output "z_vault_public_ip" {
+  description = "Public ip of the Vault node."
+  value = module.simple-vault.public_ip
+}
 output "zz_bastion_easy_connect" {
   description = "Output that provides the full command to connect to the bastion instance"
     value = <<-EOF
@@ -12,11 +19,4 @@ ssh ubuntu@${module.simple-vault.private_ip}
 --------
 
   EOF
-}
-output "z_vault_public_ip" {
-  description = "Public ip of the Vault node."
-  value = module.simple-vault.public_ip
-}
-output "ssh_allowed_from_ips" {
-  value = var.ssh_cidr_blocks
 }

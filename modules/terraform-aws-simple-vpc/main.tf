@@ -1,4 +1,3 @@
-# Resources
 resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
 
@@ -49,7 +48,6 @@ resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.main.id
   route_table_id = aws_route_table.main_public[0].id
 }
-
 
 
 resource "aws_security_group" "vpc" {

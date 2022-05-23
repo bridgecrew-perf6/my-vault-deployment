@@ -1,11 +1,10 @@
-# Create the Bastion AWS instance
 resource "aws_instance" "vault" {
   ami                         = var.ami
   associate_public_ip_address = true
   instance_type               = var.instance_type
   key_name                    = var.bastion_pubkey
   subnet_id                   = var.subnet
-  # user_data_replace_on_change = true  # This option seems to have a bug in recent AWS provider versions
+  user_data_replace_on_change = true
   user_data                   = <<EOF
 #!/bin/bash
 sudo apt update && sudo apt install -y gpg

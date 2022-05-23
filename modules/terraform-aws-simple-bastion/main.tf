@@ -1,4 +1,3 @@
-# Create the Bastion AWS instance
 resource "aws_instance" "bastion" {
   ami                         = var.ami
   instance_type               = var.instance_type
@@ -49,21 +48,18 @@ resource "aws_security_group" "public_inbound_ssh" {
 }
 
 
-# Create RSA key of size 4096 bits
 resource "tls_private_key" "bastion_sshkey" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
 
-# Write ssh private key to local
 resource "local_sensitive_file" "bastion_private_sshkey" {
   content  = tls_private_key.bastion_sshkey.private_key_openssh
   filename = "tmp/bastion_ssh_key"
 }
 
 
-# Place ssh pub key in AWS
 resource "aws_key_pair" "bastion_public_sshkey" {
   key_name   = "bastion_sshkey"
   public_key = tls_private_key.bastion_sshkey.public_key_openssh
