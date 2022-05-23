@@ -7,14 +7,14 @@ resource "aws_instance" "vault" {
   subnet_id                   = var.subnet
   # user_data_replace_on_change = true  # This option seems to have a bug in recent AWS provider versions
   user_data                   = <<EOF
-# #!/bin/bash
-# sudo apt update && sudo apt install -y gpg
-# wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
-# gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
-# echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-# sudo apt update && sudo apt install -y vault
+#!/bin/bash
+sudo apt update && sudo apt install -y gpg
+wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
+gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install -y vault
 EOF
-  vpc_security_group_ids      = [aws_security_group.private_inbound_ssh.id,aws_security_group.https.id,aws_security_group.http.id]
+  vpc_security_group_ids      = [aws_security_group.private_inbound_ssh.id,aws_security_group.https.id,aws_security_group.http.id,aws_security_group.vault.id]
 
   tags = {
     Name = var.aws_name_prefix
@@ -39,18 +39,6 @@ resource "aws_security_group" "private_inbound_ssh" {
     self             = true
   }]
 
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "allow outbound ssh to subnet"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    security_groups  = []
-    self             = false
-  }]
-
   tags = {
     Name = var.aws_name_prefix
   }
@@ -59,20 +47,8 @@ resource "aws_security_group" "private_inbound_ssh" {
 
 resource "aws_security_group" "https" {
   description = "Security group to allow public inbound and outbound https traffic"
-  name        = "vault https"
+  name        = "vault https 443"
   vpc_id      = var.vpc
-
-  ingress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "allow inbound https"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    security_groups  = []
-    self             = true
-  }]
 
   egress = [{
     cidr_blocks      = ["0.0.0.0/0"]
@@ -94,31 +70,42 @@ resource "aws_security_group" "https" {
 
 resource "aws_security_group" "http" {
   description = "Security group to allow public inbound and outbound https traffic"
-  name        = "vault http"
+  name        = "vault http 80"
   vpc_id      = var.vpc
 
-  ingress = [{
+  egress = [{
     cidr_blocks      = ["0.0.0.0/0"]
-    description      = "allow inbound http"
+    description      = "allow outbound http"
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     security_groups  = []
-    self             = true
+    self             = false
   }]
 
-  egress = [{
+  tags = {
+    Name = var.aws_name_prefix
+  }
+}
+
+
+resource "aws_security_group" "vault" {
+  description = "Security group to allow public inbound traffic to Vault on 8200"
+  name        = "vault http 8200"
+  vpc_id      = var.vpc
+
+  ingress = [{
     cidr_blocks      = ["0.0.0.0/0"]
-    description      = "allow outbound http"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
+    description      = "allow inbound 8200"
+    from_port        = 8200
+    to_port          = 8200
+    protocol         = "tcp"
     ipv6_cidr_blocks = []
     prefix_list_ids  = []
     security_groups  = []
-    self             = false
+    self             = true
   }]
 
   tags = {

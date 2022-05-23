@@ -6,7 +6,7 @@ resource "aws_instance" "bastion" {
   subnet_id                   = var.subnet
   associate_public_ip_address = true
   key_name                    = aws_key_pair.bastion_public_sshkey.key_name
-  user_data                   = "" # TODO hier verder gaan, switched naar ubuntu ami... ssh might not be enabled byt default in this ami... needs fixin.
+  user_data                   = ""
 
   tags = {
     Name = var.aws_name_prefix
