@@ -5,7 +5,7 @@ output "public_ip" {
   value = aws_instance.bastion.public_ip
 }
 output "sg-ssh" {
-  value = aws_security_group.public_inbound_ssh.id
+  value = aws_security_group.bastion.id
 }
 output "sshkey_path" {
   value = local_sensitive_file.bastion_private_sshkey.filename

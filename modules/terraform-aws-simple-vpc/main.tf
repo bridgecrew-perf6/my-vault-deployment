@@ -55,31 +55,29 @@ resource "aws_security_group" "vpc" {
   description = "Main security group, allows all outgoing"
   vpc_id      = aws_vpc.main.id
 
-  ingress = [{
-    description      = "ingress port 22 allow"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = var.ssh_cidr_blocks
-    self             = true
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    security_groups  = []
-  }]
-
-  egress = [{
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "egress allow all"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    self             = false
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-    security_groups  = []
-  }]
-
   tags = {
     Name = "${var.aws_name_prefix} sg main"
   }
+}
+
+
+resource "aws_security_group_rule" "vpc-ssh" {
+  type              = "ingress"
+  description       = "allow inbound ssh"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = var.ssh_cidr_blocks
+  security_group_id = aws_security_group.vpc.id
+}
+
+
+resource "aws_security_group_rule" "vpc-outbound-all" {
+  type              = "egress"
+  description       = "allow all outbound"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.vpc.id
 }
