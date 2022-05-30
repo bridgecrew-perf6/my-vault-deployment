@@ -4,4 +4,4 @@ tmp
 .terraform
 .DS_store
 *.tfvars
-workspace.*
+*workspace

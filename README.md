@@ -22,4 +22,7 @@ This can occur when there are too many keys on the ssh-agent keyring. One soluti
 
 ## Process & Improvements:
 TODO - DOING - Finish vault provisioning (configure Vault + tls cert)
+        - output cloud-init to terraform output? (Provisioning stanza vs User_Data+cloud-init?)
+        - Dedicated vault user
+        - Vault TLS certs for HTTPS
 TODO Make a local for AWS tagging
