@@ -1,17 +1,12 @@
+
+
 resource "aws_instance" "vault" {
   ami                         = var.ami
   associate_public_ip_address = true
   instance_type               = var.instance_type
   key_name                    = var.bastion_pubkey
   subnet_id                   = var.subnet
-  user_data                   = <<EOF
-#!/bin/bash
-sudo apt update && sudo apt install -y gpg
-wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg >/dev/null
-gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-sudo apt update && sudo apt install -y vault
-EOF
+  user_data                   = file("${path.module}/scripts/vault-installation.sh")
   vpc_security_group_ids      = [aws_security_group.vault.id]
 
   tags = {
