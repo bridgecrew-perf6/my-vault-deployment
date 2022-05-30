@@ -42,7 +42,7 @@ module "simple-vault" {
   instance_type   = "t2.micro"
   region          = var.region
   subnet          = module.simple-vpc.vpc_subnet
-  ssh_cidr_blocks = ["10.0.0.0/16"]
+  ssh_cidr_blocks = "10.0.0.0/16"
   sg-ssh          = module.simple-bastion.sg-ssh
   vpc             = module.simple-vpc.vpc_id
 }

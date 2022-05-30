@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "bastion-inbound-ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.ssh_cidr_blocks
+  cidr_blocks       = [var.ssh_cidr_blocks]
   security_group_id = aws_security_group.bastion.id
 }
 

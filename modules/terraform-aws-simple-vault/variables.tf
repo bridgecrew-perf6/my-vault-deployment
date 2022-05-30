@@ -35,8 +35,8 @@ variable "sg-ssh" {
 }
 variable "ssh_cidr_blocks" {
   description = "CIDR block to allow ssh from in the SSH security group"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
+  type        = string
+  default     = "0.0.0.0/0"
 }
 variable "subnet" {
   description = "Subnet within the vpc to deploy the bastion in"
