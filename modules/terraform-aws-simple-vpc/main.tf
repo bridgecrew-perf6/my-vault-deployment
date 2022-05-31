@@ -8,9 +8,9 @@ resource "aws_vpc" "main" {
 
 
 resource "aws_subnet" "main" {
-  vpc_id                  = aws_vpc.main.id
   cidr_block              = var.cidr_block
   map_public_ip_on_launch = var.public_subnet
+  vpc_id                  = aws_vpc.main.id
 
   tags = var.tags
 }
@@ -24,29 +24,30 @@ resource "aws_internet_gateway" "gw" {
 }
 
 
-resource "aws_route_table" "main_public" {
+resource "aws_route_table" "public" {
   count  = var.public_subnet ? 1 : 0
   vpc_id = aws_vpc.main.id
-
-  route { # TODO kan evt los? uitzoeken
-    gateway_id = aws_internet_gateway.gw[0].id
-    cidr_block = "0.0.0.0/0"
-  }
 
   tags = var.tags
 }
 
+resource "aws_route" "public" {
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.gw[0].id
+  route_table_id         = aws_route_table.public[0].id
+}
 
-resource "aws_route_table_association" "a" {
+
+resource "aws_route_table_association" "public" {
   count          = var.public_subnet ? 1 : 0
+  route_table_id = aws_route_table.public[0].id
   subnet_id      = aws_subnet.main.id
-  route_table_id = aws_route_table.main_public[0].id
 }
 
 
 resource "aws_security_group" "vpc" {
-  name        = "VPC"
   description = "Main security group, allows all outgoing"
+  name        = "VPC"
   vpc_id      = aws_vpc.main.id
 
   tags = var.tags
