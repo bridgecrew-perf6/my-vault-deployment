@@ -48,7 +48,6 @@ module "simple-vault" {
   region          = var.region
   subnet          = module.simple-vpc.vpc_subnet
   ssh_cidr_blocks = "10.0.0.0/16"
-  sg-ssh          = module.simple-bastion.sg-ssh # TODO sg-ssh weg? of hernoemen
   vpc             = module.simple-vpc.vpc_id
 
   tags = {

@@ -28,11 +28,6 @@ variable "region" {
   type        = string
   default     = ""
 }
-variable "sg-ssh" {
-  description = "ID of the security group that allows SSH."
-  type        = string
-  default     = ""
-}
 variable "ssh_cidr_blocks" {
   description = "CIDR block to allow ssh from in the SSH security group"
   type        = string
