@@ -27,7 +27,5 @@ TODO - DOING - Finish vault provisioning (configure Vault + tls cert)
         - Vault TLS certs for HTTPS
 TODO - variables.tf --> validation toevoegen waar nodig/nuttig. In specifiek bij strings
 TODO - monolithic to modulair
-TODO - pre-commit terraform fmt
 TODO - pre-commit README generation
-TODO - Make a local for AWS tagging
-TODO - Locals gebruiken voor vaak terugkerende code OF code die erg lang/complex worden in de module/main.tf.
+TODO - Use Locals for SOMETHING, just to learn --> voor vaak terugkerende code OF code die erg lang/complex worden in de module/main.tf.
