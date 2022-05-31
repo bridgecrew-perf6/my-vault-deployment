@@ -5,3 +5,5 @@ tmp
 .DS_store
 *.tfvars
 *workspace
+*tfstate.lock*
+.pre-commit-config.yaml
