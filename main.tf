@@ -1,4 +1,4 @@
-data "aws_ami" "latest_ubuntu" {
+data "aws_ami" "latest_ubuntu" { # TODO duplicate to modules and set as default, can be overwritten from root module by end user
   most_recent = true
   owners      = ["099720109477"]
 
@@ -10,26 +10,32 @@ data "aws_ami" "latest_ubuntu" {
 
 
 module "simple-vpc" {
-  source = "./modules/terraform-aws-simple-vpc"
-
-  aws_name_prefix = "vpc richarde"
+  source          = "./modules/terraform-aws-simple-vpc"
   cidr_block      = "10.0.0.0/16"
   public_subnet   = true
   region          = var.region
-  ssh_cidr_blocks = var.ssh_cidr_blocks
+  ssh_cidr_blocks = var.ssh_cidr_blocks # TODO var naam is niet beschrijvend genoeg, bv allow_ssh_in?
+
+  tags = {
+    Name = "richarde"
+  }
 }
 
 
 module "simple-bastion" {
   source = "./modules/terraform-aws-simple-bastion"
 
+  # TODO input pubkey voor gebruiker om zelf mee te geven
   ami             = data.aws_ami.latest_ubuntu.id
-  aws_name_prefix = "bastion richarde"
   instance_type   = "t2.micro"
-  region = var.region
-  subnet = module.simple-vpc.vpc_subnet
+  region          = var.region
+  subnet          = module.simple-vpc.vpc_subnet
   ssh_cidr_blocks = var.ssh_cidr_blocks
-  vpc    = module.simple-vpc.vpc_id
+  vpc             = module.simple-vpc.vpc_id
+
+  tags = {
+    Name = "richarde"
+  }
 }
 
 
@@ -37,12 +43,15 @@ module "simple-vault" {
   source = "./modules/terraform-aws-simple-vault"
 
   ami             = data.aws_ami.latest_ubuntu.id
-  aws_name_prefix = "vault richarde"
-  bastion_pubkey  = module.simple-bastion.pubkey
+  bastion_pubkey  = module.simple-bastion.pubkey # TODO bastion_ eraf, anders in richten zodat de pub key niet meer direct ui de bastion module komt, + toevoegen, input voor eigen pubkey toevoegen.
   instance_type   = "t2.micro"
   region          = var.region
   subnet          = module.simple-vpc.vpc_subnet
   ssh_cidr_blocks = "10.0.0.0/16"
-  sg-ssh          = module.simple-bastion.sg-ssh
+  sg-ssh          = module.simple-bastion.sg-ssh # TODO sg-ssh weg? of hernoemen
   vpc             = module.simple-vpc.vpc_id
+
+  tags = {
+    Name = "richarde"
+  }
 }

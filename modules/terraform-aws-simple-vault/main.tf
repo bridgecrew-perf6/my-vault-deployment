@@ -1,5 +1,3 @@
-
-
 resource "aws_instance" "vault" {
   ami                         = var.ami
   associate_public_ip_address = true
@@ -9,9 +7,7 @@ resource "aws_instance" "vault" {
   user_data                   = file("${path.module}/scripts/vault-installation.sh")
   vpc_security_group_ids      = [aws_security_group.vault.id]
 
-  tags = {
-    Name = var.aws_name_prefix
-  }
+  tags = var.tags
 }
 
 resource "aws_security_group" "vault" {
@@ -19,16 +15,14 @@ resource "aws_security_group" "vault" {
   name        = "vault http 8200"
   vpc_id      = var.vpc
 
-  tags = {
-    Name = var.aws_name_prefix
-  }
+  tags = var.tags
 }
 
 
 resource "aws_security_group_rule" "vault-api" {
   type              = "ingress"
   description       = "allow inbound 8200"
-  from_port         = 8200
+  from_port         = 8200 # TODO firewall ports variable maken
   to_port           = 8200
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
@@ -46,7 +40,7 @@ resource "aws_security_group_rule" "vault-ssh" {
   security_group_id = aws_security_group.vault.id
 }
 
-
+# TODO toch outgoing all open voor bv DNS
 resource "aws_security_group_rule" "vault-http" {
   type              = "egress"
   description       = "allow outbound http from subnet"

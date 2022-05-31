@@ -8,10 +8,10 @@ variable "ami" {
     error_message = "Bastion AMI variable not set!"
   }
 }
-variable "aws_name_prefix" {
-  description = "This will show in the AWS webgui in the Name collumn of the resource. Use this to destinguish your resources from others."
-  type        = string
-  default     = ""
+variable "tags" {
+  description = "Tags to be added to resource blocks."
+  type        = map(string)
+  default     = {}
 }
 variable "bastion_pubkey" {
   description = "Public key of the bastion host"
@@ -30,8 +30,8 @@ variable "region" {
 }
 variable "sg-ssh" {
   description = "ID of the security group that allows SSH."
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 variable "ssh_cidr_blocks" {
   description = "CIDR block to allow ssh from in the SSH security group"

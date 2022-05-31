@@ -1,7 +1,7 @@
-variable "aws_name_prefix" {
-  description = "This will show in the AWS webgui in the Name collumn of the resource. Use this to destinguish your resources from others."
-  type        = string
-  default     = ""
+variable "tags" {
+  description = "Tags to be added to resource blocks."
+  type        = map(string)
+  default     = {}
 }
 variable "ami" {
   description = "Amazon machine image to use for the Bastion server"

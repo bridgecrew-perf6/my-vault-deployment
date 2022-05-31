@@ -1,7 +1,7 @@
-variable "aws_name_prefix" {
-  description = "This string will show in the Name collumn in the AWS webgui for all deployed resources."
-  type        = string
-  default     = "unset"
+variable "tags" {
+  description = "Tags to be added to resource blocks."
+  type        = map(string)
+  default     = {}
 }
 variable "cidr_block" {
   description = "This is the CIDR block for the VPC"

@@ -1,9 +1,9 @@
+# TODO module doet veel meer dan alleen VPC, hernoemen?
+
 resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
 
-  tags = {
-    Name = "${var.aws_name_prefix} vpc"
-  }
+  tags = var.tags
 }
 
 
@@ -12,9 +12,7 @@ resource "aws_subnet" "main" {
   cidr_block              = var.cidr_block
   map_public_ip_on_launch = var.public_subnet
 
-  tags = {
-    Name = "${var.aws_name_prefix} subnet"
-  }
+  tags = var.tags
 }
 
 
@@ -22,9 +20,7 @@ resource "aws_internet_gateway" "gw" {
   count  = var.public_subnet ? 1 : 0
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.aws_name_prefix} iGW"
-  }
+  tags = var.tags
 }
 
 
@@ -32,14 +28,12 @@ resource "aws_route_table" "main_public" {
   count  = var.public_subnet ? 1 : 0
   vpc_id = aws_vpc.main.id
 
-  route {
+  route { # TODO kan evt los? uitzoeken
     gateway_id = aws_internet_gateway.gw[0].id
     cidr_block = "0.0.0.0/0"
   }
 
-  tags = {
-    Name = "${var.aws_name_prefix} route table"
-  }
+  tags = var.tags
 }
 
 
@@ -55,16 +49,14 @@ resource "aws_security_group" "vpc" {
   description = "Main security group, allows all outgoing"
   vpc_id      = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.aws_name_prefix} sg main"
-  }
+  tags = var.tags
 }
 
 
 resource "aws_security_group_rule" "vpc-ssh" {
   type              = "ingress"
   description       = "allow inbound ssh"
-  from_port         = 22
+  from_port         = 22 # TODO 22 open moet configurabel zijn, nu is er voor de gebruiker geen keus! var maken met default 22
   to_port           = 22
   protocol          = "tcp"
   cidr_blocks       = [var.ssh_cidr_blocks]

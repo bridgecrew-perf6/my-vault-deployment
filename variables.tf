@@ -10,6 +10,6 @@ variable "region" {
 }
 variable "ssh_cidr_blocks" {
   description = "CIDR block for SSH access to the bastion."
-  type = string
-  default = "0.0.0.0/0"
+  type        = string
+  default     = "0.0.0.0/0"
 }
