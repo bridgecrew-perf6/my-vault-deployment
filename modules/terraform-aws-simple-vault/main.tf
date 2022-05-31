@@ -12,7 +12,7 @@ resource "aws_instance" "vault" {
 
 resource "aws_security_group" "vault" {
   description = "Security group to allow public inbound traffic to Vault on 8200"
-  name        = "vault http 8200"
+  name        = "Vault"
   vpc_id      = var.vpc
 
   tags = var.tags

@@ -12,7 +12,7 @@ resource "aws_instance" "bastion" {
 
 
 resource "aws_security_group" "bastion" {
-  name        = "public_ssh"
+  name        = "Bastion"
   description = "Main security group, allows all outgoing"
   vpc_id      = var.vpc
 

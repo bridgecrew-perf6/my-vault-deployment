@@ -45,7 +45,7 @@ resource "aws_route_table_association" "a" {
 
 
 resource "aws_security_group" "vpc" {
-  name        = "vpc-sg"
+  name        = "VPC"
   description = "Main security group, allows all outgoing"
   vpc_id      = aws_vpc.main.id
 
