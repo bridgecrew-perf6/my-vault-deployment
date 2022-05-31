@@ -25,4 +25,9 @@ TODO - DOING - Finish vault provisioning (configure Vault + tls cert)
         - output cloud-init to terraform output? (Provisioning stanza vs User_Data+cloud-init?)
         - Dedicated vault user
         - Vault TLS certs for HTTPS
-TODO Make a local for AWS tagging
+TODO - variables.tf --> validation toevoegen waar nodig/nuttig. In specifiek bij strings
+TODO - monolithic to modulair
+TODO - pre-commit terraform fmt
+TODO - pre-commit README generation
+TODO - Make a local for AWS tagging
+TODO - Locals gebruiken voor vaak terugkerende code OF code die erg lang/complex worden in de module/main.tf.
