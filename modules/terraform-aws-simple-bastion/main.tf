@@ -4,7 +4,7 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   subnet_id                   = var.subnet
   associate_public_ip_address = true
-  key_name                    = aws_key_pair.bastion_public_sshkey.key_name
+  key_name                    = aws_key_pair.sshpubkey.key_name
   user_data                   = "" # TODO inrichting: vault cmds draaien vanaf de bastion en vault server zelf dicht zetten? Var toevoegen "debug" als true dan pas door hoppen met ssh?
 
   tags = var.tags
@@ -19,7 +19,7 @@ resource "aws_security_group" "bastion" {
   tags = var.tags
 }
 
-resource "aws_security_group_rule" "bastion-inbound-ssh" {
+resource "aws_security_group_rule" "ssh" {
   type              = "ingress"
   description       = "allow inbound ssh"
   from_port         = 22 # TODO is dit niet dubbel op met 22 openzetten op VPC niveau?
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "bastion-inbound-ssh" {
 }
 
 
-resource "aws_security_group_rule" "bastion-outbound-all" {
+resource "aws_security_group_rule" "outbound" {
   type              = "egress"
   description       = "allow outbound all"
   from_port         = 0
@@ -41,21 +41,21 @@ resource "aws_security_group_rule" "bastion-outbound-all" {
 }
 
 
-resource "tls_private_key" "bastion_sshkey" {
+resource "tls_private_key" "sshkey" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
 
-resource "local_sensitive_file" "bastion_private_sshkey" {
-  content  = tls_private_key.bastion_sshkey.private_key_openssh
-  filename = "tmp/bastion_ssh_key"
+resource "local_sensitive_file" "sshkey" {
+  content  = tls_private_key.sshkey.private_key_openssh
+  filename = "tmp/sshkey"
 }
 
 
-resource "aws_key_pair" "bastion_public_sshkey" {
-  key_name   = "bastion_sshkey"
-  public_key = tls_private_key.bastion_sshkey.public_key_openssh
+resource "aws_key_pair" "sshpubkey" {
+  key_name   = "sshpubkey"
+  public_key = tls_private_key.sshkey.public_key_openssh
 
   tags = var.tags
 }

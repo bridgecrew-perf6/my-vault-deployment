@@ -13,7 +13,7 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-variable "bastion_pubkey" {
+variable "sshpubkey" {
   description = "Public key of the bastion host"
   type        = string
   default     = "not defined"

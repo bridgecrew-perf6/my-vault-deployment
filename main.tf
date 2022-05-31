@@ -43,7 +43,7 @@ module "simple-vault" {
   source = "./modules/terraform-aws-simple-vault"
 
   ami             = data.aws_ami.latest_ubuntu.id
-  bastion_pubkey  = module.simple-bastion.pubkey # TODO bastion_ eraf, anders in richten zodat de pub key niet meer direct ui de bastion module komt, + toevoegen, input voor eigen pubkey toevoegen.
+  sshpubkey       = module.simple-bastion.sshpubkey # TODO bastion_ eraf, anders in richten zodat de pub key niet meer direct ui de bastion module komt, + toevoegen, input voor eigen pubkey toevoegen.
   instance_type   = "t2.micro"
   region          = var.region
   subnet          = module.simple-vpc.vpc_subnet
