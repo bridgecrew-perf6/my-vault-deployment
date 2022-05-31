@@ -10,7 +10,7 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update && sudo apt install -y vault
 
 # Create Vault config
-sudo cat << EOF > /etc/vault.d/vault.hcl
+cat << EOF > /etc/vault.d/vault.hcl
 ui = true
 # disable_mlock = true
 
@@ -30,18 +30,11 @@ listener "tcp" {
 #license_path = "/etc/vault.d/vault.hclic"
 EOF
 
-# Make sure the folder for the Vault "file" backend exists
-sudo mkdir -p /opt/vault/data
-
 # Start and enable the Vault service
-sudo systemctl enable --now vault.service
+systemctl enable --now vault.service
 
 # Set Vault address in the cli environment
 export VAULT_ADDR='http://127.0.0.1:8200'
 
 # Initialize Vault
-vault operator init
-
-# Write Vault unseal keys and root_token to homedir (For testing and developing only!)
-grep -A6 "Unseal Key 1:" /var/log/cloud-init-output.log > /home/ubuntu/initialisation.txt
-chown ubuntu:ubuntu /home/ubuntu/initialisation.txt
+vault operator init > /home/ubuntu/initialisation.txt
