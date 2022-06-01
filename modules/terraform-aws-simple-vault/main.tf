@@ -19,7 +19,7 @@ resource "aws_security_group" "vault" {
 }
 
 
-resource "aws_security_group_rule" "api" {
+resource "aws_security_group_rule" "ingress_api" {
   type              = "ingress"
   description       = "allow inbound 8200"
   from_port         = 8200 # TODO firewall ports variable maken
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "api" {
 }
 
 
-resource "aws_security_group_rule" "ssh" {
+resource "aws_security_group_rule" "ingress_ssh" {
   type              = "ingress"
   description       = "allow inbound ssh from subnet"
   from_port         = 22
@@ -41,7 +41,7 @@ resource "aws_security_group_rule" "ssh" {
 }
 
 # TODO toch outgoing all open voor bv DNS
-resource "aws_security_group_rule" "outbound" {
+resource "aws_security_group_rule" "egress_all" {
   type              = "egress"
   description       = "allow outbound all"
   from_port         = 0

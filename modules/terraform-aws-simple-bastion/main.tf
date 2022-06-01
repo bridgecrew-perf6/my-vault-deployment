@@ -19,7 +19,7 @@ resource "aws_security_group" "bastion" {
   tags = var.tags
 }
 
-resource "aws_security_group_rule" "ssh" {
+resource "aws_security_group_rule" "ingress_ssh" {
   type              = "ingress"
   description       = "allow inbound ssh"
   from_port         = 22 # TODO is dit niet dubbel op met 22 openzetten op VPC niveau?
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "ssh" {
 }
 
 
-resource "aws_security_group_rule" "outbound" {
+resource "aws_security_group_rule" "egress_all" {
   type              = "egress"
   description       = "allow outbound all"
   from_port         = 0

@@ -16,7 +16,7 @@ resource "aws_subnet" "main" {
 }
 
 
-resource "aws_internet_gateway" "gw" {
+resource "aws_internet_gateway" "main" {
   count  = var.public_subnet ? 1 : 0
   vpc_id = aws_vpc.main.id
 
@@ -24,23 +24,24 @@ resource "aws_internet_gateway" "gw" {
 }
 
 
-resource "aws_route_table" "public" {
+resource "aws_route_table" "main" {
   count  = var.public_subnet ? 1 : 0
   vpc_id = aws_vpc.main.id
 
   tags = var.tags
 }
 
-resource "aws_route" "public" {
+resource "aws_route" "egress_all" {
+  count                  = var.public_subnet ? 1 : 0
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.gw[0].id
-  route_table_id         = aws_route_table.public[0].id
+  gateway_id             = aws_internet_gateway.main[0].id
+  route_table_id         = aws_route_table.main[0].id
 }
 
 
-resource "aws_route_table_association" "public" {
+resource "aws_route_table_association" "egress_all" {
   count          = var.public_subnet ? 1 : 0
-  route_table_id = aws_route_table.public[0].id
+  route_table_id = aws_route_table.main[0].id
   subnet_id      = aws_subnet.main.id
 }
 
@@ -54,7 +55,7 @@ resource "aws_security_group" "vpc" {
 }
 
 
-resource "aws_security_group_rule" "vpc-ssh" {
+resource "aws_security_group_rule" "ingress_ssh" {
   type              = "ingress"
   description       = "allow inbound ssh"
   from_port         = 22 # TODO 22 open moet configurabel zijn, nu is er voor de gebruiker geen keus! var maken met default 22
@@ -65,7 +66,7 @@ resource "aws_security_group_rule" "vpc-ssh" {
 }
 
 
-resource "aws_security_group_rule" "vpc-outbound-all" {
+resource "aws_security_group_rule" "egress_all" {
   type              = "egress"
   description       = "allow all outbound"
   from_port         = 0

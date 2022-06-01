@@ -13,11 +13,6 @@ variable "ami" {
     error_message = "Bastion AMI variable not set!"
   }
 }
-variable "default_ssh_user" {
-  description = "Username to use for SSH with the Bastion"
-  type        = string
-  default     = "ec2-user"
-}
 variable "instance_type" {
   description = "Instance type to use for the bastion host"
   type        = string
