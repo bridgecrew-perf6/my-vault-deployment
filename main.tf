@@ -10,11 +10,11 @@ data "aws_ami" "latest_ubuntu" {
 
 
 module "simple-vpc" {
-  source          = "./modules/terraform-aws-simple-vpc"
-  cidr_block      = "10.0.0.0/16"
-  public_subnet   = true
-  region          = var.region
-  ssh_cidr_blocks = var.ssh_cidr_blocks
+  source           = "./modules/terraform-aws-simple-vpc"
+  cidr_block       = "10.0.0.0/16"
+  public_subnet    = true
+  region           = var.region
+  ssh_allowed_from = var.ssh_allowed_from
 
   tags = {
     Name = "richarde"
@@ -25,12 +25,12 @@ module "simple-vpc" {
 module "simple-bastion" {
   source = "./modules/terraform-aws-simple-bastion"
 
-  ami             = data.aws_ami.latest_ubuntu.id
-  instance_type   = "t2.micro"
-  region          = var.region
-  subnet          = module.simple-vpc.vpc_subnet
-  ssh_cidr_blocks = var.ssh_cidr_blocks
-  vpc             = module.simple-vpc.vpc_id
+  ami              = data.aws_ami.latest_ubuntu.id
+  instance_type    = "t2.micro"
+  region           = var.region
+  subnet           = module.simple-vpc.vpc_subnet
+  ssh_allowed_from = var.ssh_allowed_from
+  vpc              = module.simple-vpc.vpc_id
 
   tags = {
     Name = "richarde"
@@ -41,13 +41,13 @@ module "simple-bastion" {
 module "simple-vault" {
   source = "./modules/terraform-aws-simple-vault"
 
-  ami             = data.aws_ami.latest_ubuntu.id
-  sshpubkey       = module.simple-bastion.sshpubkey
-  instance_type   = "t2.micro"
-  region          = var.region
-  subnet          = module.simple-vpc.vpc_subnet
-  ssh_cidr_blocks = "10.0.0.0/16"
-  vpc             = module.simple-vpc.vpc_id
+  ami              = data.aws_ami.latest_ubuntu.id
+  sshpubkey        = module.simple-bastion.sshpubkey
+  instance_type    = "t2.micro"
+  region           = var.region
+  subnet           = module.simple-vpc.vpc_subnet
+  ssh_allowed_from = "10.0.0.0/16"
+  vpc              = module.simple-vpc.vpc_id
 
   tags = {
     Name = "richarde"

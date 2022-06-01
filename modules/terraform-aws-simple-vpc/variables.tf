@@ -23,7 +23,7 @@ variable "region" {
     error_message = "Region variable not set!"
   }
 }
-variable "ssh_cidr_blocks" {
+variable "ssh_allowed_from" {
   description = "If the subnet is public, this is the cidr block that is allowed to connect with SSH."
   type        = string
   default     = "0.0.0.0/0"

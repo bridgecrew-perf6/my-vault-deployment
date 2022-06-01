@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "vpc-ssh" {
   from_port         = 22 # TODO 22 open moet configurabel zijn, nu is er voor de gebruiker geen keus! var maken met default 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = [var.ssh_cidr_blocks]
+  cidr_blocks       = [var.ssh_allowed_from]
   security_group_id = aws_security_group.vpc.id
 }
 
