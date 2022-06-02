@@ -15,7 +15,7 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   subnet_id                   = var.subnet
   associate_public_ip_address = true
-  key_name                    = aws_key_pair.sshpubkey.key_name
+  key_name                    = try(aws_key_pair.ssh_pubkey[0].key_name, aws_key_pair.auto_ssh_pubkey[0].key_name)
   user_data                   = ""
 
   tags = var.tags
@@ -51,22 +51,33 @@ resource "aws_security_group_rule" "egress_all" {
   security_group_id = aws_security_group.bastion.id
 }
 
+# If there is a user supplied ssh pub key then use it, else generate one.
+resource "aws_key_pair" "ssh_pubkey" {
+  count      = var.ssh_pubkey != "" ? 1 : 0
+  key_name   = "ssh_pubkey"
+  public_key = var.ssh_pubkey
 
-resource "tls_private_key" "sshkey" {
+  tags = var.tags
+}
+
+resource "tls_private_key" "auto_ssh_key" {
+  count     = var.ssh_pubkey == "" ? 1 : 0
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
 
-resource "local_sensitive_file" "sshkey" {
-  content  = tls_private_key.sshkey.private_key_openssh
-  filename = "tmp/sshkey"
+resource "local_sensitive_file" "auto_ssh_privkey" {
+  count    = var.ssh_pubkey == "" ? 1 : 0
+  content  = tls_private_key.auto_ssh_key[0].private_key_openssh
+  filename = "tmp/ssh_privkey"
 }
 
 
-resource "aws_key_pair" "sshpubkey" {
-  key_name   = "sshpubkey"
-  public_key = tls_private_key.sshkey.public_key_openssh
+resource "aws_key_pair" "auto_ssh_pubkey" {
+  count      = var.ssh_pubkey == "" ? 1 : 0
+  key_name   = "auto_ssh_pubkey"
+  public_key = tls_private_key.auto_ssh_key[0].public_key_openssh
 
   tags = var.tags
 }

@@ -39,6 +39,11 @@ variable "ssh_allowed_from" {
     error_message = "Invalid cidr_block, pattern should be \"<ip>/<netmask>\". example: \"192.168.0.0/16\" "
   }
 }
+variable "ssh_pubkey" {
+  description = "Public key for ssh"
+  type        = string
+  default     = ""
+}
 variable "subnet" {
   description = "Subnet within the vpc to deploy the bastion in"
   type        = string

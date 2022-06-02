@@ -14,7 +14,7 @@ resource "aws_instance" "vault" {
   ami                         = local.ami
   associate_public_ip_address = true
   instance_type               = var.instance_type
-  key_name                    = var.sshpubkey
+  key_name                    = var.ssh_pubkey
   subnet_id                   = var.subnet
   user_data                   = file("${path.module}/scripts/vault-installation.sh")
   vpc_security_group_ids      = [aws_security_group.vault.id]

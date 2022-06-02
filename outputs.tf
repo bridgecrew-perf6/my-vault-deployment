@@ -7,7 +7,7 @@ output "zz_bastion_easy_connect" {
 
 --------
 How to connect:
-ssh-add ${module.simple-bastion.sshkey}
+ssh-add ${module.simple-bastion.ssh_privkey}
 ssh -A ubuntu@${module.simple-bastion.public_ip}
 
 Optional, ssh to the Vault instance:

@@ -31,7 +31,7 @@ module "simple-bastion" {
   region           = var.region
   subnet           = module.simple-vpc.vpc_subnet
   ssh_allowed_from = var.ssh_allowed_from
-  ssh_pubkey       = "./id_rsa.pub"
+  ssh_pubkey       = file("test_ssh_key_rsa.pub")
   vpc              = module.simple-vpc.vpc_id
 
   tags = {
@@ -45,12 +45,11 @@ module "simple-vault" {
   source = "./modules/terraform-aws-simple-vault"
 
   ami              = data.aws_ami.latest_ubuntu.id
-  sshpubkey        = module.simple-bastion.sshpubkey
   instance_type    = "t2.micro"
   region           = var.region
   subnet           = module.simple-vpc.vpc_subnet
   ssh_allowed_from = "10.0.0.0/16"
-  ssh_pubkey       = "./id_rsa.pub"
+  ssh_pubkey       = module.simple-bastion.ssh_pubkey
   vpc              = module.simple-vpc.vpc_id
 
   tags = {

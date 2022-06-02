@@ -18,10 +18,10 @@ variable "tags" {
     error_message = "The owner tag is empty for the AWS resources. Please set the AWS owner tag in the root module."
   }
 }
-variable "sshpubkey" {
+variable "ssh_pubkey" {
   description = "Public key of the bastion host"
   type        = string
-  default     = "not defined"
+  default     = ""
 }
 variable "instance_type" {
   description = "Instance type to use for the bastion host"
