@@ -7,3 +7,6 @@ tmp
 *workspace
 *tfstate.lock*
 .pre-commit-config.yaml
+test_ssh_key_rsa
+*.pub
+.terraform.lock.hcl
