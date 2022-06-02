@@ -17,7 +17,8 @@ module "simple-vpc" {
   ssh_allowed_from = var.ssh_allowed_from
 
   tags = {
-    Name = "richarde"
+    owner = "richarde"
+    Name  = "vpc richarde"
   }
 }
 
@@ -33,7 +34,8 @@ module "simple-bastion" {
   vpc              = module.simple-vpc.vpc_id
 
   tags = {
-    Name = "richarde"
+    owner = "richarde"
+    Name  = "bastion richarde"
   }
 }
 
@@ -50,6 +52,7 @@ module "simple-vault" {
   vpc              = module.simple-vpc.vpc_id
 
   tags = {
-    Name = "richarde"
+    owner = "richarde"
+    Name  = "vault richarde"
   }
 }
