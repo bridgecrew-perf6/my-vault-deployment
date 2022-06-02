@@ -10,7 +10,7 @@ How to connect:
 ssh-add ${module.simple-bastion.sshkey}
 ssh -A ubuntu@${module.simple-bastion.public_ip}
 
-Optional, ssh through to the Vault instance:
+Optional, ssh to the Vault instance:
 ssh ubuntu@${module.simple-vault.private_ip}
 
 Vault UI address:
