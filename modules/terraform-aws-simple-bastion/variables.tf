@@ -8,10 +8,11 @@ variable "ami" {
   type        = string
   default     = ""
 
-  validation {
-    condition     = length(var.ami) != 0
-    error_message = "Bastion AMI variable not set!"
-  }
+  # TODO validation disabled for testing with a default AMI.
+  # validation {
+  #   condition     = length(var.ami) != 0
+  #   error_message = "Bastion AMI variable not set!"
+  # }
 }
 variable "instance_type" {
   description = "Instance type to use for the bastion host"

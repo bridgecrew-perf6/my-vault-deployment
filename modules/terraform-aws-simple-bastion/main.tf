@@ -1,11 +1,22 @@
+data "aws_ami" "latest_al2022" {
+  count       = var.ami == "" ? 1 : 0
+  most_recent = true
+  owners      = ["137112412989"]
+
+  filter {
+    name   = "name"
+    values = ["al2022-ami-2022.*-x86_64"]
+  }
+}
+
 resource "aws_instance" "bastion" {
-  ami                         = var.ami
+  ami                         = local.ami
   instance_type               = var.instance_type
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   subnet_id                   = var.subnet
   associate_public_ip_address = true
   key_name                    = aws_key_pair.sshpubkey.key_name
-  user_data                   = "" # TODO inrichting: vault cmds draaien vanaf de bastion en vault server zelf dicht zetten? Var toevoegen "debug" als true dan pas door hoppen met ssh?
+  user_data                   = ""
 
   tags = var.tags
 }

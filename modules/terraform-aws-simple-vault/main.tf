@@ -1,5 +1,17 @@
+data "aws_ami" "latest_al2022" {
+  count       = var.ami == "" ? 1 : 0
+  most_recent = true
+  owners      = ["137112412989"]
+
+  filter {
+    name   = "name"
+    values = ["al2022-ami-2022.*-x86_64"]
+  }
+}
+
+
 resource "aws_instance" "vault" {
-  ami                         = var.ami
+  ami                         = local.ami
   associate_public_ip_address = true
   instance_type               = var.instance_type
   key_name                    = var.sshpubkey
@@ -9,6 +21,7 @@ resource "aws_instance" "vault" {
 
   tags = var.tags
 }
+
 
 resource "aws_security_group" "vault" {
   description = "Security group to allow public inbound traffic to Vault on 8200"
