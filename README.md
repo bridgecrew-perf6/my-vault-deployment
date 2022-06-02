@@ -21,13 +21,9 @@ Received disconnect from 34.241.60.238 port 22:2: Too many authentication failur
 This can occur when there are too many keys on the ssh-agent keyring. One solution is discard the current keyring with `ssh-add -D` and add the ssh key for this deployment again with `ssh-add tmp/bastion_ssh_key`.
 
 ## Process & Improvements:
-- [ ] duplicate AMI data blocks to modules and set a default, can be overwritten from root module by end user!
-- [ ] tags, Name (functie van resource) EN owener = (richard)
-- [ ] Use Locals for SOMETHING, just to learn --> voor vaak terugkerende code OF code die erg lang/complex worden in de module/main.tf.
-- [ ] input pubkey voor gebruiker om zelf mee te geven aan de modules (vault en bastion)
-- [ ] var namen langs lopen en namen zo simpel mogelijk maken
-- [ ] variables.tf --> validation toevoegen waar nodig/nuttig. In specifiek bij strings
-- [ ] Bastion provisioning is nu leeg. In richten zodat Vault cmds draaien vanaf de bastion en vault server zelf dicht zetten? Var toevoegen "debug" als true dan pas door hoppen met ssh?
+- [ ] module variables for the Vault port
+- [ ] AMI's fixed per module, Opinionated! find another excuse for locals :)))
+- [ ] Bastion provisioning is now empty. Perhaps provision in a way so that it can only access vault on 8200 via the CLI and no SSH access?
 
 - [ ] pre-commit README generation
 - [ ] DOING - Finish vault provisioning (configure Vault + tls cert)
@@ -38,11 +34,10 @@ This can occur when there are too many keys on the ssh-agent keyring. One soluti
 
 
 ## Done
+- [x] try(function) input pubkey voor gebruiker om zelf mee te geven aan de modules (vault en bastion)
+- [x] variables.tf --> validation toevoegen waar nodig/nuttig. In specifiek bij strings
+- [x] duplicate AMI data blocks to modules and set a default, can be overwritten from root module by end user!
+        - [x] Use Locals for SOMETHING, just to learn --> voor vaak terugkerende code OF code die erg lang/complex worden in de module/main.tf.
 - [x] renamed many variables and data/resource names to be more simple/logical
 - [x] seperate rout instead of integrated stanza in aws_route_table
-- [ ] refactored aws tags everywhere
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-       
+- [x] refactored aws tags everywhere, but no locals used! --> tags, Name (functie van resource) EN owener = (richard), no random hash yet and no cluster differenciation yet
