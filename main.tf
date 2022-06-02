@@ -18,7 +18,7 @@ module "simple-vpc" {
 
   tags = {
     owner = "richarde"
-    Name  = "vpc richarde"
+    Name  = "vpc RE"
   }
 }
 
@@ -31,11 +31,12 @@ module "simple-bastion" {
   region           = var.region
   subnet           = module.simple-vpc.vpc_subnet
   ssh_allowed_from = var.ssh_allowed_from
+  ssh_pubkey       = "./id_rsa.pub"
   vpc              = module.simple-vpc.vpc_id
 
   tags = {
     owner = "richarde"
-    Name  = "bastion richarde"
+    Name  = "bastion RE"
   }
 }
 
@@ -49,10 +50,11 @@ module "simple-vault" {
   region           = var.region
   subnet           = module.simple-vpc.vpc_subnet
   ssh_allowed_from = "10.0.0.0/16"
+  ssh_pubkey       = "./id_rsa.pub"
   vpc              = module.simple-vpc.vpc_id
 
   tags = {
     owner = "richarde"
-    Name  = "vault richarde"
+    Name  = "vault RE"
   }
 }
