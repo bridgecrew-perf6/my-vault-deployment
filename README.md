@@ -20,6 +20,11 @@ Received disconnect from 34.241.60.238 port 22:2: Too many authentication failur
 ```
 This can occur when there are too many keys on the ssh-agent keyring. One solution is discard the current keyring with `ssh-add -D` and add the ssh key for this deployment again with `ssh-add tmp/bastion_ssh_key`.
 
+## test with images
+![test tiff](dynamic_vault_port_todo.tiff)
+
+![test psd](dynamic_vault_port_todo.psd)
+
 ## Process & Improvements:
 - [ ] module variables for the Vault port
 - [ ] AMI's fixed per module, Opinionated! find another excuse for locals :)))
