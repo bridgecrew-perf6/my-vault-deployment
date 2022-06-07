@@ -1,5 +1,3 @@
-# TODO module doet veel meer dan alleen VPC, hernoemen?
-
 resource "aws_vpc" "main" {
   cidr_block = var.cidr_block
 
@@ -58,7 +56,7 @@ resource "aws_security_group" "vpc" {
 resource "aws_security_group_rule" "ingress_ssh" {
   type              = "ingress"
   description       = "allow inbound ssh"
-  from_port         = 22 # TODO 22 open moet configurabel zijn, nu is er voor de gebruiker geen keus! var maken met default 22
+  from_port         = 22
   to_port           = 22
   protocol          = "tcp"
   cidr_blocks       = [var.ssh_allowed_from]

@@ -24,11 +24,18 @@ This can occur when there are too many keys on the ssh-agent keyring. One soluti
 ![test tiff](dynamic_vault_port_todo.tiff)
 
 ![test psd](dynamic_vault_port_todo.psd)
+![test psd](dynamic_vault_port_todo.jpeg)
 
 ## Process & Improvements:
 - [ ] module variables for the Vault port
+        - [x] template for install script to make the Vault listener port variable
+        - [x] make variable for the root module outputs.tf
+        - [x] make variable for the vault security group in AWS
+        - [ ] allow privilidged ports, sub 1000 ports like 443/80 etc.
 - [ ] AMI's fixed per module, Opinionated! find another excuse for locals :)))
 - [ ] Bastion provisioning is now empty. Perhaps provision in a way so that it can only access vault on 8200 via the CLI and no SSH access?
+
+- [ ] - module aws vpc: module doet veel meer dan alleen VPC, hernoemen?
 
 - [ ] pre-commit README generation
 - [ ] DOING - Finish vault provisioning (configure Vault + tls cert)

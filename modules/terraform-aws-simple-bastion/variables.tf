@@ -2,12 +2,6 @@ variable "ami" {
   description = "Amazon machine image to use for the Bastion server"
   type        = string
   default     = ""
-
-  # TODO validation disabled for testing with a default AMI.
-  # validation {
-  #   condition     = length(var.ami) != 0
-  #   error_message = "Bastion AMI variable not set!"
-  # }
 }
 variable "instance_type" {
   description = "Instance type to use for the bastion host"
