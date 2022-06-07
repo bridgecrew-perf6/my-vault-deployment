@@ -8,6 +8,11 @@ variable "ami" {
     error_message = "Bastion AMI variable not set!"
   }
 }
+variable "vault_port" {
+  description = "Port the Vault API socket will be listening on. Default is 8200"
+  type        = number
+  default     = 8200
+}
 variable "tags" {
   description = "Tags to be added to resource blocks."
   type        = map(string)

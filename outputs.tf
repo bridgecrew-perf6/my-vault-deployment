@@ -14,7 +14,7 @@ Optional, ssh to the Vault instance:
 ssh ubuntu@${module.simple-vault.private_ip}
 
 Vault UI address:
-http://${module.simple-vault.public_ip}:8200
+http://${module.simple-vault.public_ip}:${module.simple-vault.vault_port}
 --------
 
 EOF

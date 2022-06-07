@@ -46,6 +46,7 @@ module "simple-vault" {
 
   ami              = data.aws_ami.latest_ubuntu.id
   instance_type    = "t2.micro"
+  vault_port       = 8200 # TODO only works on non-privilidged ports at the moment, make so it works on sub 1000 ports? i.e. 443/80 ?
   region           = var.region
   subnet           = module.simple-vpc.vpc_subnet
   ssh_allowed_from = "10.0.0.0/16"

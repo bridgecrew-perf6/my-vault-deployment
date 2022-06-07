@@ -16,7 +16,7 @@ resource "aws_instance" "vault" {
   instance_type               = var.instance_type
   key_name                    = var.ssh_pubkey
   subnet_id                   = var.subnet
-  user_data                   = file("${path.module}/scripts/vault-installation.sh")
+  user_data                   = templatefile("${path.module}/scripts/vault-installation.sh.tpl", { port = var.vault_port })
   vpc_security_group_ids      = [aws_security_group.vault.id]
 
   tags = var.tags
@@ -35,8 +35,8 @@ resource "aws_security_group" "vault" {
 resource "aws_security_group_rule" "ingress_api" {
   type              = "ingress"
   description       = "allow inbound 8200"
-  from_port         = 8200 # TODO firewall ports variable maken
-  to_port           = 8200
+  from_port         = var.vault_port
+  to_port           = var.vault_port
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.vault.id
@@ -53,7 +53,7 @@ resource "aws_security_group_rule" "ingress_ssh" {
   security_group_id = aws_security_group.vault.id
 }
 
-# TODO toch outgoing all open voor bv DNS
+
 resource "aws_security_group_rule" "egress_all" {
   type              = "egress"
   description       = "allow outbound all"
