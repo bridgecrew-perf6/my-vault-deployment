@@ -5,8 +5,9 @@ resource "aws_vpc" "main" {
 }
 
 
-resource "aws_subnet" "main" {
-  cidr_block              = var.cidr_block
+resource "aws_subnet" "public" {
+  cidr_block              = "10.0.0.0/24"
+  availability_zone       = "${var.region}b" # TODO cleanup
   map_public_ip_on_launch = var.public_subnet
   vpc_id                  = aws_vpc.main.id
 
@@ -40,7 +41,21 @@ resource "aws_route" "egress_all" {
 resource "aws_route_table_association" "egress_all" {
   count          = var.public_subnet ? 1 : 0
   route_table_id = aws_route_table.main[0].id
-  subnet_id      = aws_subnet.main.id
+  subnet_id      = aws_subnet.public.id
+}
+
+
+resource "aws_subnet" "private" {
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "${var.region}a" # TODO cleanup
+  vpc_id            = aws_vpc.main.id
+
+  tags = var.tags
+}
+
+
+resource "aws_db_subnet_group" "default" {
+  subnet_ids = [aws_subnet.private.id, aws_subnet.public.id] # TODO two private subnets instead?
 }
 
 

@@ -16,7 +16,11 @@ resource "aws_instance" "bastion" {
   subnet_id                   = var.subnet
   associate_public_ip_address = true
   key_name                    = try(aws_key_pair.ssh_pubkey[0].key_name, aws_key_pair.auto_ssh_pubkey[0].key_name)
-  user_data                   = ""
+  user_data                   = file("${path.module}/scripts/user_data.sh")
+  # user_data                   = <<EOF
+  # #!/bin/bash
+  # touch /home/ubuntu/.hushlogin
+  # EOF
 
   tags = var.tags
 }

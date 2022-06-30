@@ -38,3 +38,6 @@ export VAULT_ADDR='http://127.0.0.1:${port}'
 
 # Initialize Vault
 vault operator init > /home/ubuntu/initialisation.txt
+
+# Remove Welcome Message upon logging in via SSH
+touch /home/ubuntu/.hushlogin

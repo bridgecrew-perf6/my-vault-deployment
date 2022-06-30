@@ -6,15 +6,22 @@ output "zz_bastion_easy_connect" {
   value       = <<-EOF
 
 --------
-How to connect:
+# How to connect:
 ssh-add ${module.simple-bastion.ssh_privkey}
 ssh -A ubuntu@${module.simple-bastion.public_ip}
 
-Optional, ssh to the Vault instance:
+# Optional, ssh to the Vault instance:
 ssh ubuntu@${module.simple-vault.private_ip}
+export VAULT_ADDR="http://127.0.0.1:8200"
+vault status
 
-Vault UI address:
+# Vault UI address:
 http://${module.simple-vault.public_ip}:${module.simple-vault.vault_port}
+
+# MariaDB
+address: ${module.simple-mariadb.address}
+username: ${module.simple-mariadb.username}
+password: ${module.simple-mariadb.password}
 --------
 
 EOF
